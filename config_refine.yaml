@@ -3,9 +3,9 @@
 # hypernet == "warmstart_points").
 #
 # Usage:
-#   1. python DIP_Danilo/main_convex.py            (produces runs/convex_baseline_<timestamp>/checkpoint.pt)
+#   1. python ./main_convex.py            (produces runs/convex_baseline_<timestamp>/checkpoint.pt)
 #   2. fill in warm_start_checkpoint below with that path
-#   3. python DIP_Danilo/main.py DIP_Danilo/config_refine.yaml
+#   3. python ./main.py ./config_refine.yaml
 #
 # Everything else mirrors config_adam.yaml -- same data/physical/validation/
 # training sections, so this is directly comparable to a config_adam.yaml
