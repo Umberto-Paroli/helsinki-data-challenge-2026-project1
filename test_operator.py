@@ -24,7 +24,7 @@ extended with:
 
 Usage: edit CANDIDATE_STL / ASTEROID_NUM / DATA_DIR below to point at
 your files, then:
-    python DIP_Danilo/test_operator.py
+    python ./test_operator.py
 Prints a table per data source (real, blender) x camera_distance, plus
 the usual comparison plot.
 """
@@ -53,9 +53,9 @@ ASTEROID_NUM = 3
 DATA_DIR = Path.cwd() / "Data"
 
 CANDIDATE_STL = [
-    DATA_DIR / "GT_rescaled" / f"asteroid{ASTEROID_NUM}_normalized.stl",
+    DATA_DIR / f"AsteroidModel0{ASTEROID_NUM}_shape_public/" / f"asteroid{ASTEROID_NUM}.stl",
     # or point this at one of your own reconstruction runs, e.g.:
-    # Path("DIP_Danilo/runs/<some_run>/final_mesh.stl"),
+    # Path("./runs/<some_run>/final_mesh.stl"),
 ]
 
 CAMERA_DISTANCE_CANDIDATES = [None, 10.0, 15.0, 20.0, 30.0, 45.0, 60.0, 100.0]

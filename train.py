@@ -430,7 +430,7 @@ def write_obj(path, vertices: torch.Tensor, faces: torch.Tensor):
 # ---------------------------------------------------------------------
 
 def train(cfg, config_path):
-    device = torch.device("cuda:1" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
+    device = torch.device("cuda:0" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu")
     run_dir = make_run_dir(cfg, config_path)
     print(f"run folder: {run_dir}")
 

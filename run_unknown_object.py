@@ -21,7 +21,7 @@ automatically so you don't have to copy them by hand:
     into step 3's config before it runs.
 
 Usage:
-    python DIP_Danilo/run_unknown_object.py
+    python ./run_unknown_object.py
 """
 from __future__ import annotations
 
@@ -34,7 +34,7 @@ from typing import Optional
 import torch
 import yaml
 
-SCRIPT_DIR = Path(__file__).resolve().parent          # .../DIP_Danilo
+SCRIPT_DIR = Path(__file__).resolve().parent          # .../
 PROJECT_ROOT = SCRIPT_DIR.parent                        # .../Helsinki Asteroid Challenge
 
 CONFIG_CALIBRATE = SCRIPT_DIR / "config_calibrate_unknown.yaml"

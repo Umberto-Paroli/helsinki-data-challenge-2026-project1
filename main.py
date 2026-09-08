@@ -5,7 +5,7 @@ Everything (data paths, physical constants, model choice/hyperparameters,
 training schedule) comes from the YAML file -- nothing is passed on the
 command line except the config path itself, so a run is fully reproducible
 from the single file saved into its own runs/ folder. Defaults to
-./DIP_Danilo/config_adam.yaml if no path is given.
+./config_adam.yaml if no path is given.
 
 Only the ADAM optimizer path is wired in (LBFGS is not currently used --
 see legacy/train_LBFGS_old.py if you need it back).
@@ -45,7 +45,7 @@ def load_config(path: str) -> dict:
 
 
 if __name__ == "__main__":
-    config_path = sys.argv[1] if len(sys.argv) > 1 else "./DIP_Danilo_v2/config_refine.yaml"
+    config_path = sys.argv[1] if len(sys.argv) > 1 else "./config_refine.yaml"
     cfg = load_config(config_path)
     assert cfg.get("optimizer", "ADAM").upper() == "ADAM", (
         f"optimizer={cfg.get('optimizer')!r} -- only ADAM is wired in right now "

@@ -34,7 +34,7 @@ def load_config(path: str) -> dict:
 
 
 if __name__ == "__main__":
-    config_path = sys.argv[1] if len(sys.argv) > 1 else "./DIP_Danilo_v2/config_convex.yaml"
+    config_path = sys.argv[1] if len(sys.argv) > 1 else "./config_convex.yaml"
     cfg = load_config(config_path)
     assert cfg.get("optimizer", "ADAM").upper() == "ADAM", (
         f"optimizer={cfg.get('optimizer')!r} -- only ADAM is wired in right now"

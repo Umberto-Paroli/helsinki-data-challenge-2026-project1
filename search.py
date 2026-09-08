@@ -32,11 +32,11 @@ Two phases, run separately (see `--phase`):
              checkpoints (run `--phase convex` first).
 
 Usage:
-  python DIP_Danilo_v2/search.py --phase convex --hours 40
-  python DIP_Danilo_v2/search.py --phase refine --hours 40
+  python ./search.py --phase convex --hours 40
+  python ./search.py --phase refine --hours 40
 
 Resumable: trials are persisted to a SQLite file (`--storage`, default
-`DIP_Danilo_v2/search.db`) via Optuna, so killing the script (Ctrl-C, SSH
+`./search.db`) via Optuna, so killing the script (Ctrl-C, SSH
 drop, out of time) and re-running the SAME command later continues from
 where it left off instead of losing progress -- essential over a 3.5-day
 unattended run.
@@ -56,7 +56,7 @@ from typing import Optional
 import optuna
 import yaml
 
-SCRIPT_DIR = Path(__file__).resolve().parent          # .../DIP_Danilo_v2
+SCRIPT_DIR = Path(__file__).resolve().parent          # .../
 PROJECT_ROOT_DEFAULT = SCRIPT_DIR.parent               # .../Helsinki Asteroid Challenge
 
 # ---------------------------------------------------------------------
@@ -82,8 +82,8 @@ def _object(num: int, cylinder_radius: float) -> dict:
                                    f"Asteroid{num}_lightcurve_data/Asteroid0{num}_lightcurve_intensity_blender.txt",
         "binary_file_blender": f"./Data/AsteroidModel0{num}_shape_public/"
                                 f"Asteroid{num}_lightcurve_data/Asteroid0{num}_lightcurve_binary_blender.txt",
-        "gt_path": f"/data/danilo/HelsinkiAsteroidChallenge/Data/GT_rescaled/"
-                    f"asteroid{num}_normalized.stl",
+        "gt_path": f"./Data/AsteroidModel0{num}_shape_public/"
+                    f"asteroid{num}.stl",
     }
 
 
@@ -202,7 +202,7 @@ def run_training_subprocess(config_path: Path, entry_script: str, project_root: 
     compared against object 1's step 20 from other trials, which isn't
     a meaningful comparison.
     """
-    cmd = [sys.executable, str(project_root / "DIP_Danilo_v2" / entry_script), str(config_path)]
+    cmd = [sys.executable, str(project_root / entry_script), str(config_path)]
     proc = subprocess.Popen(cmd, cwd=str(project_root), stdout=subprocess.PIPE,
                              stderr=subprocess.STDOUT, text=True, bufsize=1)
 
@@ -356,7 +356,7 @@ def build_convex_config(trial: optuna.Trial, obj: dict, run_name: str,
                       "log_every": VALIDATION_EVERY,
                       **({"lr_decay_factor": tr["lr_decay_factor"], "lr_max_decays": tr["lr_max_decays"]}
                          if "lr_decay_factor" in tr else {})},
-        "output": {"base_dir": "./DIP_Danilo_v2/runs"},
+        "output": {"base_dir": "./runs"},
     }
 
 
@@ -420,7 +420,7 @@ def build_refine_config(trial: optuna.Trial, obj: dict, run_name: str, checkpoin
                       "log_every": VALIDATION_EVERY,
                       **({"lr_decay_factor": tr["lr_decay_factor"], "lr_max_decays": tr["lr_max_decays"]}
                          if "lr_decay_factor" in tr else {})},
-        "output": {"base_dir": "./DIP_Danilo_v2/runs"},
+        "output": {"base_dir": "./runs"},
     }
 
 
@@ -496,7 +496,7 @@ def calibrate_period_for_object(obj: dict, project_root: Path, scratch_dir: Path
                       "lambda_binary_start": 1.0, "lambda_binary_end": 1.0,
                       "lambda_intensity_start": 10.0, "lambda_intensity_end": 10.0,
                       "log_every": 20},
-        "output": {"base_dir": "./DIP_Danilo_v2/runs"},
+        "output": {"base_dir": "./runs"},
     }
     cfg_path = scratch_dir / f"{run_name}.yaml"
     _write_config(cfg, cfg_path)
