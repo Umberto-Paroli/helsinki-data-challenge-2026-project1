@@ -62,4 +62,4 @@ training:
   #                          metrics.csv logs omega/omega0 every row so you can watch them move.
 
 output:
-  base_dir: ./DIP_Danilo_v2/runs
+  base_dir: ./runs

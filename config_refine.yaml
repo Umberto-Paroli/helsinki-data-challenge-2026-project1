@@ -48,7 +48,7 @@ model:
   LMAX: 9                     # unused by warmstart_points itself, kept only so load_config's eval(...) context matches config_adam.yaml
   nrows: 12                   # MUST match the nrows used in the convex run that produced the checkpoint below
   hypernet: warmstart_points
-  warm_start_checkpoint: ./DIP_Danilo_v2/runs/convex_baseline_REPLACE_ME/checkpoint.pt
+  warm_start_checkpoint: ./runs/convex_baseline_REPLACE_ME/checkpoint.pt
   warm_start_generator: points        # points (default) | shared_mlp -- see build_hypernet's warmstart_points branch
   warm_start_generator_kwargs:        # only used when warm_start_generator: shared_mlp
     noise_dim: 8
