@@ -1,0 +1,42 @@
+run_name: refine_04
+optimizer: ADAM
+tol: 24
+data:
+  intensity_file: ./Data/AsteroidModel04_shape_secret/Asteroid4_lightcurve_data/Asteroid04_lightcurve_intensity.txt
+  binary_file: ./Data/AsteroidModel04_shape_secret/Asteroid4_lightcurve_data/Asteroid04_lightcurve_binary.txt
+  intensity_file_blender: ./Data/AsteroidModel04_shape_secret/Asteroid4_lightcurve_data/Asteroid04_lightcurve_intensity_blender.txt
+  binary_file_blender: ./Data/AsteroidModel04_shape_secret/Asteroid4_lightcurve_data/Asteroid04_lightcurve_binary_blender.txt
+validation:
+  enabled: false
+  gt_path: none
+  every: log_every
+  voxel_size: 0.02
+physical:
+  cylinder_radius: 1.475
+  blender_loss_weight: 0.2941300358254524
+  fit_omega: false
+  period: __PERIOD__
+model:
+  dtype: torch.float64
+  LMAX: 9
+  nrows: 23
+  hypernet: warmstart_points
+  warm_start_checkpoint: __CHECKPOINT__
+  warm_start_generator: shared_mlp
+  warm_start_generator_kwargs:
+    hidden: 64
+    n_layers: 4
+    noise_dim: 8
+training:
+  steps: 5000
+  lr: 6.109132368855526e-06
+  lr_decay_factor: 0.5
+  lr_max_decays: 3
+  seed: 0
+  lambda_binary_start: 0.13139580113300955
+  lambda_binary_end: 0.13139580113300955
+  lambda_intensity_start: 30.3694675636498
+  lambda_intensity_end: 30.3694675636498
+  log_every: 20
+output:
+  base_dir: ./runs_unknown/04

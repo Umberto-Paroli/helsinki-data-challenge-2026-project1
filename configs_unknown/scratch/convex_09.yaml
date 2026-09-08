@@ -1,0 +1,40 @@
+run_name: convex_09
+optimizer: ADAM
+tol: 72
+data:
+  intensity_file: ./Data/AsteroidModel09_shape_secret/Asteroid9_lightcurve_data/Asteroid09_lightcurve_intensity.txt
+  binary_file: ./Data/AsteroidModel09_shape_secret/Asteroid9_lightcurve_data/Asteroid09_lightcurve_binary.txt
+  intensity_file_blender: ./Data/AsteroidModel09_shape_secret/Asteroid9_lightcurve_data/Asteroid09_lightcurve_intensity_blender.txt
+  binary_file_blender: ./Data/AsteroidModel09_shape_secret/Asteroid9_lightcurve_data/Asteroid09_lightcurve_binary_blender.txt
+validation:
+  enabled: false
+  gt_path: none
+  every: log_every
+  voxel_size: 0.02
+physical:
+  cylinder_radius: 0.67
+  blender_loss_weight: 3.08824594256482
+  fit_omega: false
+  period: 862.5005419286463
+model:
+  dtype: torch.float64
+  LMAX: 9
+  nrows: 23
+  generator: shared_mlp
+  generator_kwargs:
+    hidden: 32
+    n_layers: 3
+    noise_dim: 8
+training:
+  steps: 5000
+  lr: 0.0019204094885422215
+  lr_decay_factor: 0.5
+  lr_max_decays: 3
+  seed: 0
+  lambda_binary_start: 0.16560109461276892
+  lambda_binary_end: 0.16560109461276892
+  lambda_intensity_start: 42.9387756701466
+  lambda_intensity_end: 42.9387756701466
+  log_every: 20
+output:
+  base_dir: ./DIP_Danilo_v2/runs_unknown/09

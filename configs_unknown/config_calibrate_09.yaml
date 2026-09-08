@@ -1,0 +1,42 @@
+run_name: calibrate_09
+optimizer: ADAM
+tol: 201
+data:
+  intensity_file: ./Data/AsteroidModel09_shape_secret/Asteroid9_lightcurve_data/Asteroid09_lightcurve_intensity.txt
+  binary_file: ./Data/AsteroidModel09_shape_secret/Asteroid9_lightcurve_data/Asteroid09_lightcurve_binary.txt
+  intensity_file_blender: ./Data/AsteroidModel09_shape_secret/Asteroid9_lightcurve_data/Asteroid09_lightcurve_intensity_blender.txt
+  binary_file_blender: ./Data/AsteroidModel09_shape_secret/Asteroid9_lightcurve_data/Asteroid09_lightcurve_binary_blender.txt
+validation:
+  enabled: false
+  gt_path: none
+  every: log_every
+  voxel_size: 0.02
+physical:
+  cylinder_radius: 0.67
+  period: auto
+  period_search:
+    p_min_frac: 0.85
+    p_max_frac: 1.0
+    n_bins: 12
+  fit_omega: true
+  omega_period_min_frac: 0.85
+  omega_period_max_frac: 1.05
+  camera_distance: 30.0
+model:
+  dtype: torch.float64
+  LMAX: 9
+  nrows: 12
+  generator: points
+  generator_kwargs: {}
+training:
+  steps: 200
+  lr: 0.0
+  omega_lr: 1.0e-06
+  seed: 0
+  lambda_binary_start: 1.0
+  lambda_binary_end: 1.0
+  lambda_intensity_start: 10.0
+  lambda_intensity_end: 10.0
+  log_every: 20
+output:
+  base_dir: ./runs_unknown/09
