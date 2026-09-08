@@ -33,20 +33,27 @@ Change also output directory if required
 
 When the configuration files are ready we can run the two stage of the process in sequence:
 ```bash
+python ./run_unknown_object.py
+```
+
+We can also manyally call each steps, but doing so requires to specify the checkpoint for the refinement step in the configuration files
+```bash
 python main_convex.py ./config_calibrate_unknown.yaml
 python main_convex.py ./config_convex_unknown.yaml
 python main.py ./config_refine_unknown.yaml
 ```
-Or we run the full pipeline by changing configuration files in [run_unknown_object.py](./run_unknown_object.py):
-```bash
-python ./run_unknown_object.py
-```
 
-## Logic
+## Saved Configuratio files
+To simplify the work and avoid running the search of hyperparameters we include our configuration files for each unknown objects in [configs_unknown directory](./configs_unknown/).
+
+## Project summary
 This project, which extend the first solution code, divide the problem into two phases.\
 First it performs a **convex reconstruction** where an initial shape (an ellipsoid as default) is adapted to the lightcurves of an object. \
 Second, a **non-convex refinement** step is applied to retrieve features lost from a convex approximation of the unknown objects.\
 Each step is performed by an independent model trained with challenge publics data trough a forward operator that emulates lightcurves experimental setup.
+
+
+[INSERT HERE SOME LINES ABOUT THE MODELS]
 
 For more details on model architectures and training process see [train_convex.py](./train_convex.py) and [train.py](./train_convex.py). \
 **Note:** In those files device is set to "cuda:0". Change to "cuda:1" to allow the usage of GPU, if available.
