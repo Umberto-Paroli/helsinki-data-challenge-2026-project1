@@ -10,17 +10,37 @@ pip install -r requirements.txt
 Before run the code add asteroids lightcurves and .stl of the public objects in a **./Data** directory. Real videos and blender renderings aren't required. 
 
 ## Usage
-To run the full pipeline for an unknown object fix the lightcurves path according to the desired object in the following configuration files:
-- [config_calibrate_unknown](./config_calibrate_unknown.yaml)
-- [config_convex_unknown](./config_convex_unknown.yaml)
-- [config_refine_unknown](./config_refine_unknown.yaml)
+Running [search.py](./search.py) find a best hyperparameter configuration for the three public objects available from th data challenge. \
+The resulting values has to be replicated in configuration files for each unknown objects but changing the light curve file path adn the cylinder_radius which are different for every objects. \
+The configuration files present in the repository are obtained by running:
+```bash
+python search.py --phase convex --hours 24
+python search.py --phase refine --hours 24
+```
+In each configuration file one must set:
+```YAML
+  data:
+    intensity_file: <LC_INTENSITY_PATH>
+    binary_file: <LC_INTENSITY_BINARY>
+    intensity_file_blender: <LC_BLENDER_INTENSITY_PATH> # only if this object has published Blender data
+    binary_file_blender: <LC_BLENDER_BINARY_PATH>
+```
+Change also output directory if required
+```YAML
+  output:
+    base_dir: ./runs_unknown/[N] #if desired
+```
 
-Then run:
+When the configuration files are ready we can run the two stage of the process in sequence:
+```bash
+python main_convex.py ./config_calibrate_unknown.yaml
+python main_convex.py ./config_convex_unknown.yaml
+python main.py ./config_refine_unknown.yaml
+```
+Or we run the full pipeline by changing configuration files in [run_unknown_object.py](./run_unknown_object.py):
 ```bash
 python ./run_unknown_object.py
 ```
-
-Hyperparameters of the process are obtained trough [search.py](./search.py) which optimizes over the public shapes available from  the data challenge (see files comments for more details).
 
 ## Logic
 This project, which extend the first solution code, divide the problem into two phases.\
