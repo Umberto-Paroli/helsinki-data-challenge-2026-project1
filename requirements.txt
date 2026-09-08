@@ -1,0 +1,8 @@
+torch
+matplotlib
+numpy
+pyyaml
+scipy
+trimesh
+fast-simplification
+opencv-python
