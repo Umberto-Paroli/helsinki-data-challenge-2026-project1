@@ -33,5 +33,5 @@ training:
 validation:
   enabled: true
   every: log_every
-  gt_path: ./Data/AsteroidModel02_shape_public/asteroid1.stl
+  gt_path: ./Data/AsteroidModel01_shape_public/asteroid1.stl
   voxel_size: 0.02
