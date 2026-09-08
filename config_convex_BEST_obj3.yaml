@@ -14,7 +14,7 @@ model:
   nrows: 12
 optimizer: ADAM
 output:
-  base_dir: ./DIP_Danilo_v2/runs
+  base_dir: ./runs
 physical:
   blender_loss_weight: 2.5611826535571782
   cylinder_radius: 0.88
@@ -36,5 +36,5 @@ training:
 validation:
   enabled: true
   every: log_every
-  gt_path: /data/danilo/HelsinkiAsteroidChallenge/Data/GT_rescaled/asteroid3_normalized.stl
+  gt_path: ./Data/AsteroidModel03_shape_public/asteroid3.stl
   voxel_size: 0.02

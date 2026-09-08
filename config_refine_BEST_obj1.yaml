@@ -8,12 +8,12 @@ model:
   dtype: torch.float64
   hypernet: warmstart_points
   nrows: 12
-  warm_start_checkpoint: DIP_Danilo_v2/runs/search_cx_t22_obj1_20260811_185206/checkpoint.pt
+  warm_start_checkpoint: ./runs/[RUN_NAME]/checkpoint.pt
   warm_start_generator: points
   warm_start_generator_kwargs: {}
 optimizer: ADAM
 output:
-  base_dir: ./DIP_Danilo_v2/runs
+  base_dir: ./runs
 physical:
   blender_loss_weight: 0.12302694333443927
   cylinder_radius: 1.12
@@ -33,5 +33,5 @@ training:
 validation:
   enabled: true
   every: log_every
-  gt_path: /data/danilo/HelsinkiAsteroidChallenge/Data/GT_rescaled/asteroid1_normalized.stl
+  gt_path: ./Data/AsteroidModel02_shape_public/asteroid1.stl
   voxel_size: 0.02
