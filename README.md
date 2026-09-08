@@ -28,5 +28,5 @@ First it performs a **convex reconstruction** where an initial shape (an ellipso
 Second, a **refinement** step is applied to retrieve non-convex features of the unknown objects.\
 Each step is performed by an independent model trained with challenge publics data trough a forward operator that emulate the process to obtain lightcurves.
 
-For more details non model architectures and training process see [train_convex.py](./train_convex.py) and [train.py](./train_convex.py).
-Note: In those files device is set to "cuda:0". Change to "cuda:1" to allow the usage of GPU, if available.
+For more details non model architectures and training process see [train_convex.py](./train_convex.py) and [train.py](./train_convex.py). \
+**Note:** In those files device is set to "cuda:0". Change to "cuda:1" to allow the usage of GPU, if available.
