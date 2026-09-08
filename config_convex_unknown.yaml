@@ -1,0 +1,66 @@
+# Step 2/3 of run_unknown_object.py: convex-stage reconstruction using the
+# BEST hyperparameters found by search.py, applied to a NEW object with no
+# ground truth.
+#
+# EDIT:
+#   1. data / cylinder_radius / camera_distance for the new object.
+#   2. Every field marked "<-- FROM SEARCH" below: copy the value from
+#      config_convex_BEST_obj<N>.yaml (or search_leaderboard_convex.csv's
+#      "params" column for the winning trial) -- these are the same for
+#      all 3 objects (one shared recipe), so any BEST file works as the source.
+# physical.period is a placeholder -- run_unknown_object.py OVERWRITES it
+# with step 1's calibrated value automatically, no need to touch it here.
+
+run_name: convex_unknown
+optimizer: ADAM
+tol: 75                                # <-- FROM SEARCH (cx_tol)
+
+#Change asteroid number to the desired object
+data:
+  intensity_file: ./Data/AsteroidModel10_shape_secret/Asteroid10_lightcurve_data/Asteroid010_lightcurve_intensity.txt
+  binary_file: ./Data/AsteroidModel10_shape_secret/Asteroid10_lightcurve_data/Asteroid010_lightcurve_binary.txt
+  intensity_file_blender: ./Data/AsteroidModel10_shape_secret/Asteroid10_lightcurve_data/Asteroid010_lightcurve_intensity_blender.txt   # only if this object has published Blender data
+  binary_file_blender: ./Data/AsteroidModel10_shape_secret/Asteroid10_lightcurve_data/Asteroid010_lightcurve_binary_blender.txt
+
+
+validation:
+  enabled: False
+  gt_path: none                         # no GT for this object -- must still be a present key (see chat)
+  every: log_every
+  voxel_size: 0.02
+
+physical:
+  cylinder_radius: 3.95         # known physical property of THIS object
+  period: auto                    # placeholder -- overwritten by run_unknown_object.py from step 1
+  fit_omega: false
+  camera_distance: 30.0           # same value used for objects 1-3
+  # blender_camera_distance: REPLACE_ME # only if using Blender data above
+  blender_loss_weight: 2.5611826535571782            # <-- FROM SEARCH (cx_blender_loss_weight), only if using Blender data above
+
+model:
+  dtype: torch.float64
+  LMAX: 9
+  nrows: 12
+  generator: shared_mlp # <-- FROM SEARCH (cx_generator: points | shared_mlp)
+  generator_kwargs: # <-- FROM SEARCH: only if generator is shared_mlp; (noise_dim / hidden / n_layers -- cx_noise_dim etc.)
+    hidden: 64
+    n_layers: 2
+    noise_dim: 4                                    
+                                         
+
+training:
+  steps: 5000                            # matches search.py's STEPS_CONVEX -- can raise now that this
+                                         # is a one-off run, not budget-capped by a 400-trial search;
+                                         # if you do, consider raising tol proportionally too
+  lr: 0.0016379926630697313                            # <-- FROM SEARCH (cx_lr)
+  seed: 0
+  lambda_binary_start: 0.1584392283422144             # <-- FROM SEARCH (cx_lambda_binary, same value for start/end)
+  lambda_binary_end: 1584392283422144
+  lambda_intensity_start: 7.4810315610831015         # <-- FROM SEARCH (cx_lambda_intensity, same value for start/end)
+  lambda_intensity_end: 7.4810315610831015
+  log_every: 20
+  # lr_decay_factor: 0.5                # include ONLY if cx_use_lr_decay was True for the winning trial
+  # lr_max_decays: 3                    #   (both fixed constants -- see search.py's FIXED_LR_DECAY_FACTOR/MAX_DECAYS)
+
+output:
+  base_dir: ./runs_unknown/10

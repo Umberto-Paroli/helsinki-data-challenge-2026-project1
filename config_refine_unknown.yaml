@@ -1,0 +1,62 @@
+# Step 3/3 of run_unknown_object.py: non-convex refinement, warm-started
+# from step 2's convex checkpoint, using the BEST refine hyperparameters
+# found by search.py, applied to a NEW object with no ground truth.
+#
+# EDIT:
+#   1. data / cylinder_radius / camera_distance for the new object (same
+#      values as config_convex_unknown.yaml).
+#   2. Every field marked "<-- FROM SEARCH" below: copy from
+#      config_refine_BEST_obj<N>.yaml (any object's BEST file -- same
+#      shared recipe for all 3).
+# physical.period AND model.warm_start_checkpoint are placeholders --
+# run_unknown_object.py OVERWRITES both automatically (period from step 1,
+# checkpoint from step 2's output), no need to touch them here.
+
+run_name: refine_unknown
+optimizer: ADAM
+tol: 80                                 # <-- FROM SEARCH (rf_tol)
+
+#Change asteroid number to the desired object
+data:
+  intensity_file: ./Data/AsteroidModel10_shape_secret/Asteroid10_lightcurve_data/Asteroid010_lightcurve_intensity.txt
+  binary_file: ./Data/AsteroidModel10_shape_secret/Asteroid10_lightcurve_data/Asteroid010_lightcurve_binary.txt
+  intensity_file_blender: ./Data/AsteroidModel10_shape_secret/Asteroid10_lightcurve_data/Asteroid010_lightcurve_intensity_blender.txt   # only if this object has published Blender data
+  binary_file_blender: ./Data/AsteroidModel10_shape_secret/Asteroid10_lightcurve_data/Asteroid010_lightcurve_binary_blender.txt
+validation:
+  enabled: False
+  gt_path: none                         # no GT for this object -- must still be a present key (see chat)
+  every: log_every
+  voxel_size: 0.02
+
+physical:
+  cylinder_radius: 3.95         # known physical property of THIS object
+  period: auto                    # placeholder -- overwritten by run_unknown_object.py from step 1
+  fit_omega: false
+  camera_distance: 30.0           # same value used for objects 1-3
+  # blender_camera_distance: REPLACE_ME # only if using Blender data above
+  blender_loss_weight: 0.12302694333443927            # <-- FROM SEARCH (cx_blender_loss_weight), only if using Blender data 
+
+model:
+  dtype: torch.float64
+  LMAX: 9
+  nrows: 12
+  hypernet: warmstart_points
+  warm_start_checkpoint: PLACEHOLDER    # overwritten by run_unknown_object.py with step 2's checkpoint path
+  warm_start_generator: points          # <-- FROM SEARCH (rf_generator: points | shared_mlp)
+  warm_start_generator_kwargs: {}       # <-- FROM SEARCH: only if generator is shared_mlp
+                                         #     (noise_dim / hidden / n_layers -- rf_noise_dim etc.)
+
+training:
+  steps: 5000                            # matches search.py's STEPS_REFINE -- can raise, see convex config's note
+  lr: 1.4138878516685303e-06                            # <-- FROM SEARCH (rf_lr)
+  seed: 0
+  lambda_binary_start: 0.5875335449769012             # <-- FROM SEARCH (rf_lambda_binary, same value for start/end)
+  lambda_binary_end: 0.5875335449769012
+  lambda_intensity_start: 22.08453213662722          # <-- FROM SEARCH (rf_lambda_intensity, same value for start/end)
+  lambda_intensity_end: 22.08453213662722
+  log_every: 20
+  # lr_decay_factor: 0.5                # include ONLY if rf_use_lr_decay was True for the winning trial
+  # lr_max_decays: 3                    #   (both fixed constants -- see search.py's FIXED_LR_DECAY_FACTOR/MAX_DECAYS)
+
+output:
+  base_dir: ./runs_unknown/10

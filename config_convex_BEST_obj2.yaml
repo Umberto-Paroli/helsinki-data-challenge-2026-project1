@@ -1,0 +1,40 @@
+data:
+  binary_file: ./Data/AsteroidModel02_shape_public/Asteroid2_lightcurve_data/Asteroid02_lightcurve_binary.txt
+  binary_file_blender: ./Data/AsteroidModel02_shape_public/Asteroid2_lightcurve_data/Asteroid02_lightcurve_binary_blender.txt
+  intensity_file: ./Data/AsteroidModel02_shape_public/Asteroid2_lightcurve_data/Asteroid02_lightcurve_intensity.txt
+  intensity_file_blender: ./Data/AsteroidModel02_shape_public/Asteroid2_lightcurve_data/Asteroid02_lightcurve_intensity_blender.txt
+model:
+  LMAX: 9
+  dtype: torch.float64
+  generator: shared_mlp
+  generator_kwargs:
+    hidden: 64
+    n_layers: 2
+    noise_dim: 4
+  nrows: 12
+optimizer: ADAM
+output:
+  base_dir: ./DIP_Danilo_v2/runs
+physical:
+  blender_loss_weight: 2.5611826535571782
+  cylinder_radius: 1.42
+  fit_omega: false
+  period: 851.7769937674391
+run_name: BEST_convex_obj2
+tol: 73
+training:
+  lambda_binary_end: 0.1584392283422144
+  lambda_binary_start: 0.1584392283422144
+  lambda_intensity_end: 7.4810315610831015
+  lambda_intensity_start: 7.4810315610831015
+  log_every: 20
+  lr: 0.0016379926630697313
+  lr_decay_factor: 0.5
+  lr_max_decays: 3
+  seed: 0
+  steps: 5000
+validation:
+  enabled: true
+  every: log_every
+  gt_path: /data/danilo/HelsinkiAsteroidChallenge/Data/GT_rescaled/asteroid2_normalized.stl
+  voxel_size: 0.02

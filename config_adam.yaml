@@ -1,0 +1,80 @@
+# Example config -- copy this per experiment, keep them under configs/
+# so you have a record of every setting you tried.
+
+run_name: octantoid_baseline          # folder will be runs/<run_name>_<timestamp>/
+optimizer: ADAM
+tol: 50
+
+#Change asteroid number to the desired object
+data:
+  intensity_file: ./Data/AsteroidModel03_shape_public/Asteroid3_lightcurve_data/Asteroid03_lightcurve_intensity.txt
+  binary_file: ./Data/AsteroidModel03_shape_public/Asteroid3_lightcurve_data/Asteroid03_lightcurve_binary.txt
+  intensity_file_blender: ./Data/AsteroidModel03_shape_public/Asteroid3_lightcurve_data/Asteroid03_lightcurve_intensity_blender.txt
+  binary_file_blender: ./Data/AsteroidModel03_shape_public/Asteroid3_lightcurve_data/Asteroid03_lightcurve_binary_blender.txt
+  # ^ optional: set BOTH to also train jointly on the Blender-simulated lightcurves for this
+  #   same object (see chat / test_operator.py) -- same mesh/omega/omega0, an extra
+  #   simulate_all_curves call on the Blender TIME grid, losses combined (see physical.blender_loss_weight)
+
+validation:
+  enabled: True
+  every: log_every
+  gt_path: ./Data/GT_rescaled/asteroid3_normalized.stl
+  voxel_size: 0.01
+
+physical:
+  cylinder_radius: 0.88 #1.12, 1.42, 0.88
+  period: auto
+  period_search:
+    p_min_frac: 1.0                   # search trial periods in [p_min_frac, p_max_frac] * T
+    p_max_frac: 1.0                    # true period <= T is the only thing known a priori
+    n_bins: 12                         # phase bins for the Stellingwerf statistic
+                   # refine period/phase jointly with shape after PDM
+  fit_omega: false                     # true = also optimize omega/omega0 (small lr) -- risky, see chat
+  # omega_period_min_frac: 0.85        # optional: bounds the PERIOD omega is allowed to drift to while
+  # omega_period_max_frac: 1.05        #   fit_omega=true (as fractions of T = recording span) -- soft/smooth
+  #                                       during training, hard at export/checkpoint time. PDM's own
+  #                                       period_search already bounds its STARTING estimate, but fit_omega's
+  #                                       subsequent gradient descent has no limit of its own otherwise. Both
+  #                                       must be set together to activate (unset = unconstrained, prior behavior).
+  # camera_distance: 30.0              # optional: perspective distance (body radii) used to render the REAL-data curves;
+  #                                       defaults to 30.0 (previous hardcoded value) if unset. Calibrate with test_operator.py.
+  # blender_camera_distance: 45.0      # optional: same, for the Blender curves specifically -- defaults to camera_distance
+  #                                       if unset, but Blender's virtual camera may need a different value (see test_operator.py)
+  # blender_loss_weight: 1.0           # optional: how much the Blender loss term (if intensity_file_blender/binary_file_blender
+  #                                       are set above) contributes relative to the real-data term
+
+model:
+  dtype: torch.float64
+  LMAX: 9
+  nrows: 12
+  hypernet: variant_D1                     # one of: flat | sphere | graph | variant_D1 | variant_D2
+  hypernet_kwargs:                     # forwarded as **kwargs to the hypernet constructor
+    latent_dim: 3*(LMAX+1)**2
+    hidden: 256
+    hidden_layers: 3
+    n_layers: 9
+    omega_0: 10.0
+    k_hop: 5
+    noise_dim: 8
+    # for "flat": latent_dim, hidden
+    # for "graph": hidden, n_layers
+
+training:
+  steps: 1000
+  lr: 0.0001
+  seed: 0
+  lambda_binary_start: 1.0
+  lambda_binary_end: 1.0
+  lambda_intensity_start: 10.0
+  lambda_intensity_end: 10.0
+  log_every: 5
+  # lr_decay_factor: 0.5   # optional: on loss plateau (patience >= tol), multiply lr by this instead of stopping immediately (see train.plateau_lr_step)
+  # lr_max_decays: 3       # stop for real only after this many plateau-triggered decays with no further improvement
+  # omega_lr: 0.00001      # optional: LR for omega/omega0 specifically when physical.fit_omega: true
+  #                          -- goes HERE under training (alongside lr), not under physical, even
+  #                          though omega itself is a physical.* field. Defaults to lr*0.1 if unset.
+  #                          metrics.csv logs omega/omega0 every row so you can watch them move.
+
+output:
+  base_dir: ./runs
+

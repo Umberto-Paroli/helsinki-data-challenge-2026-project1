@@ -1,0 +1,65 @@
+# Config for main_convex.py (stage 1: convex-only reconstruction).
+# Mirrors config_adam.yaml's data/physical/validation/training sections so
+# the two stages are directly comparable; the model section is simpler
+# since ConvexPointCloud has no hidden layers / hypernet choice to set.
+
+run_name: convex_baseline             # folder will be runs/<run_name>_<timestamp>/
+optimizer: ADAM
+tol: 50
+
+#Change asteroid number to the desired object
+data:
+  intensity_file: ./Data/AsteroidModel03_shape_public/Asteroid3_lightcurve_data/Asteroid03_lightcurve_intensity.txt
+  binary_file: ./Data/AsteroidModel03_shape_public/Asteroid3_lightcurve_data/Asteroid03_lightcurve_binary.txt
+  intensity_file_blender: ./Data/AsteroidModel03_shape_public/Asteroid3_lightcurve_data/Asteroid03_lightcurve_intensity_blender.txt
+  binary_file_blender: ./Data/AsteroidModel03_shape_public/Asteroid3_lightcurve_data/Asteroid03_lightcurve_binary_blender.txt
+  # ^ optional: set BOTH to also train jointly on the Blender-simulated lightcurves (see config_adam.yaml's comment / test_operator.py)
+
+validation:
+  enabled: false
+  every: log_every
+  gt_path: ./data/AsteroidModel03_shape_public/asteroid3.stl
+  voxel_size: 0.01
+
+physical:
+  cylinder_radius: 0.88 #1.12, 1.42, 0.88
+  period: auto
+  period_search:
+    p_min_frac: 1.0
+    p_max_frac: 1.0
+    n_bins: 12
+  fit_omega: false
+  omega_period_min_frac: 0.85        # optional: bounds the PERIOD omega may drift to while fit_omega=true
+  omega_period_max_frac: 1.05        #   (fractions of T) -- see config_adam.yaml's comment
+  camera_distance: 60.0              # optional, defaults to 30.0 -- see config_adam.yaml's comment / test_operator.py
+  #blender_camera_distance: 10.0      # optional, defaults to camera_distance if unset
+  blender_loss_weight: 1.0           # optional, only used when intensity_file_blender/binary_file_blender are set above
+
+model:
+  dtype: torch.float64
+  LMAX: 9          # only used to build the direction grid (octantoid_directions/estimate_ellipsoid_r0); no SH coefficients are fit here
+  nrows: 12         # resolution of the initial point cloud -- same grid as config_adam.yaml, for a fair comparison
+  generator: points          # points | shared_mlp -- see hypernets.ConvexPointCloud / ConvexOffsetNet docstrings
+  generator_kwargs:          # only used when generator: shared_mlp
+    noise_dim: 8
+    hidden: 64  
+    n_layers: 3
+
+training:
+  steps: 1000
+  lr: 0.0001
+  seed: 0
+  lambda_binary_start: 1.0
+  lambda_binary_end: 1.0
+  lambda_intensity_start: 10.0
+  lambda_intensity_end: 10.0
+  log_every: 5
+  lr_decay_factor: 0.5   # optional: on loss plateau (patience >= tol), multiply lr by this instead of stopping immediately (see train.plateau_lr_step)
+  lr_max_decays: 3       # stop for real only after this many plateau-triggered decays with no further improvement
+  # omega_lr: 0.00001      # optional: LR for omega/omega0 specifically when physical.fit_omega: true
+  #                          -- goes HERE under training (alongside lr), not under physical, even
+  #                          though omega itself is a physical.* field. Defaults to lr*0.1 if unset.
+  #                          metrics.csv logs omega/omega0 every row so you can watch them move.
+
+output:
+  base_dir: ./runs

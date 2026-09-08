@@ -1,0 +1,59 @@
+# Step 1/3 of run_unknown_object.py: omega/period calibration for a NEW
+# object with no ground truth. Mirrors search.py's calibrate_period_for_object
+# exactly (same steps/omega_lr/bounds it used for objects 1-3), so the new
+# object's period is derived the same way, consistently.
+#
+# EDIT: intensity_file / binary_file / cylinder_radius / camera_distance.
+# Everything else here is unlikely to need changing.
+
+run_name: calibrate_unknown
+optimizer: ADAM
+tol: 201                                # OMEGA_CALIBRATION_STEPS + 1, never let the plateau path cut this short
+
+#Change asteroid number to the desired object
+data:
+  intensity_file: ./Data/AsteroidModel10_shape_secret/Asteroid10_lightcurve_data/Asteroid010_lightcurve_intensity.txt
+  binary_file: ./Data/AsteroidModel10_shape_secret/Asteroid10_lightcurve_data/Asteroid010_lightcurve_binary.txt
+  intensity_file_blender: ./Data/AsteroidModel10_shape_secret/Asteroid10_lightcurve_data/Asteroid010_lightcurve_intensity_blender.txt   # only if this object has published Blender data
+  binary_file_blender: ./Data/AsteroidModel10_shape_secret/Asteroid10_lightcurve_data/Asteroid010_lightcurve_binary_blender.txt
+
+validation:
+  enabled: False
+  gt_path: none                         # no GT for this object -- must still be a present key (see chat),
+                                         # value is never actually read since enabled is False
+  every: log_every
+  voxel_size: 0.02
+
+physical:
+  cylinder_radius: 3.95          # known physical property of THIS object -- not a hyperparameter
+  period: auto
+  period_search:
+    p_min_frac: 0.85                    # narrowed from the general 0.5 default -- see chat
+    p_max_frac: 1.0
+    n_bins: 12
+  fit_omega: true
+  omega_period_min_frac: 0.85           # bounds fit_omega's subsequent drift, separate from period_search above
+  omega_period_max_frac: 1.05
+  camera_distance: 30.0           # same value calibrated for objects 1-3 via test_operator.py,
+                                         # assumed constant across objects -- spot-check if unsure
+
+model:
+  dtype: torch.float64
+  LMAX: 9
+  nrows: 12
+  generator: points
+  generator_kwargs: {}
+
+training:
+  steps: 200                            # matches search.py's OMEGA_CALIBRATION_STEPS
+  lr: 0.0                               # shape frozen -- this run is ONLY about omega/omega0
+  omega_lr: 0.000001
+  seed: 0
+  lambda_binary_start: 1.0
+  lambda_binary_end: 1.0
+  lambda_intensity_start: 10.0
+  lambda_intensity_end: 10.0
+  log_every: 20
+
+output:
+  base_dir: ./runs_unknown/10

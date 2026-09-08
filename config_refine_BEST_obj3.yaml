@@ -1,0 +1,37 @@
+data:
+  binary_file: ./Data/AsteroidModel03_shape_public/Asteroid3_lightcurve_data/Asteroid03_lightcurve_binary.txt
+  binary_file_blender: ./Data/AsteroidModel03_shape_public/Asteroid3_lightcurve_data/Asteroid03_lightcurve_binary_blender.txt
+  intensity_file: ./Data/AsteroidModel03_shape_public/Asteroid3_lightcurve_data/Asteroid03_lightcurve_intensity.txt
+  intensity_file_blender: ./Data/AsteroidModel03_shape_public/Asteroid3_lightcurve_data/Asteroid03_lightcurve_intensity_blender.txt
+model:
+  LMAX: 9
+  dtype: torch.float64
+  hypernet: warmstart_points
+  nrows: 12
+  warm_start_checkpoint: DIP_Danilo_v2/runs/search_cx_t22_obj3_20260811_191820/checkpoint.pt
+  warm_start_generator: points
+  warm_start_generator_kwargs: {}
+optimizer: ADAM
+output:
+  base_dir: ./DIP_Danilo_v2/runs
+physical:
+  blender_loss_weight: 0.12302694333443927
+  cylinder_radius: 0.88
+  fit_omega: false
+  period: 817.3080521313753
+run_name: BEST_refine_obj3
+tol: 81
+training:
+  lambda_binary_end: 0.5875335449769012
+  lambda_binary_start: 0.5875335449769012
+  lambda_intensity_end: 22.08453213662722
+  lambda_intensity_start: 22.08453213662722
+  log_every: 20
+  lr: 1.4138878516685303e-06
+  seed: 0
+  steps: 5000
+validation:
+  enabled: true
+  every: log_every
+  gt_path: /data/danilo/HelsinkiAsteroidChallenge/Data/GT_rescaled/asteroid3_normalized.stl
+  voxel_size: 0.02
