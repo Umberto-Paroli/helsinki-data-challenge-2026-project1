@@ -6,3 +6,4 @@ scipy
 trimesh
 fast-simplification
 opencv-python
+optuna
