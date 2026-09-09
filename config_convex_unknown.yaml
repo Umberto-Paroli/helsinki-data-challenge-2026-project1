@@ -55,7 +55,7 @@ training:
   lr: 0.0016379926630697313                            # <-- FROM SEARCH (cx_lr)
   seed: 0
   lambda_binary_start: 0.1584392283422144             # <-- FROM SEARCH (cx_lambda_binary, same value for start/end)
-  lambda_binary_end: 1584392283422144
+  lambda_binary_end: 0.1584392283422144
   lambda_intensity_start: 7.4810315610831015         # <-- FROM SEARCH (cx_lambda_intensity, same value for start/end)
   lambda_intensity_end: 7.4810315610831015
   log_every: 20
