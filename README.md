@@ -17,7 +17,7 @@ The configuration files present in the repository are obtained by running:
 python search.py --phase convex --hours 24
 python search.py --phase refine --hours 24
 ```
-In each configuration file one must set:
+If different from "./Data", changhe light curves path in configuration files:
 ```YAML
   data:
     intensity_file: <LC_INTENSITY_PATH>
@@ -31,12 +31,14 @@ Change also output directory if required
     base_dir: ./runs_unknown/[N] #if desired
 ```
 
-When the configuration files are ready we can run the three stage of the process in sequence:
+When the configuration files, update [](./run_unknown_object.py).
+To execute the full pipeline run:
 ```bash
 python ./run_unknown_object.py
 ```
 
-We can also manually call each script, but doing so requires to specify the checkpoint for the refinement step in the configuration files
+It is possible to manually call each script, but doing so requires also to update \_PERIOD\_ and \_CHECKPOINT\_ in "config_convex" and "config_calibrate" files.
+The the following commands in sequence:
 ```bash
 python main_convex.py ./config_calibrate_unknown.yaml
 python main_convex.py ./config_convex_unknown.yaml
@@ -44,7 +46,8 @@ python main.py ./config_refine_unknown.yaml
 ```
 
 ## Saved Configuratio files
-To simplify the work and avoid running the search of hyperparameters we include our configuration files for each unknown objects in [configs_unknown directory](./configs_unknown/).
+To simplify the work and avoid running the search of hyperparameters we include our configuration files for each unknown objects, for each pipeline step. \
+They are saved in [configs_unknown directory](./configs_unknown/).
 
 ## Project summary
 This project, which extend the first solution code, divide the problem into two phases.\

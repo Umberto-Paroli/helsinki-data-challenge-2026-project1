@@ -35,11 +35,11 @@ import torch
 import yaml
 
 SCRIPT_DIR = Path(__file__).resolve().parent          # .../
-PROJECT_ROOT = SCRIPT_DIR.parent                        # .../Helsinki Asteroid Challenge
+PROJECT_ROOT = SCRIPT_DIR                        # .../Helsinki Asteroid Challenge
 
-CONFIG_CALIBRATE = SCRIPT_DIR / "config_calibrate_unknown.yaml"
-CONFIG_CONVEX = SCRIPT_DIR / "config_convex_unknown.yaml"
-CONFIG_REFINE = SCRIPT_DIR / "config_refine_unknown.yaml"
+CONFIG_CALIBRATE = SCRIPT_DIR / "configs_unknown" / "config_calibrate_04.yaml"
+CONFIG_CONVEX = SCRIPT_DIR / "configs_unknown" / "config_convex_04.yaml"
+CONFIG_REFINE = SCRIPT_DIR / "configs_unknown" / "config_refine_04.yaml"
 
 SCRATCH_DIR = SCRIPT_DIR / "unknown_object_scratch"    # generated (period/checkpoint-filled) configs go here
 
