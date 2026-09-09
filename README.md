@@ -31,12 +31,12 @@ Change also output directory if required
     base_dir: ./runs_unknown/[N] #if desired
 ```
 
-When the configuration files are ready we can run the two stage of the process in sequence:
+When the configuration files are ready we can run the three stage of the process in sequence:
 ```bash
 python ./run_unknown_object.py
 ```
 
-We can also manyally call each steps, but doing so requires to specify the checkpoint for the refinement step in the configuration files
+We can also manually call each script, but doing so requires to specify the checkpoint for the refinement step in the configuration files
 ```bash
 python main_convex.py ./config_calibrate_unknown.yaml
 python main_convex.py ./config_convex_unknown.yaml
