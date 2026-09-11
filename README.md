@@ -51,12 +51,9 @@ They are saved in [configs_unknown directory](./configs_unknown/).
 
 ## Project summary
 This project, which extend the first solution code, divide the problem into two phases.\
-First it performs a **convex reconstruction** where an initial shape (an ellipsoid as default) is adapted to the lightcurves of an object. \
-Second, a **non-convex refinement** step is applied to retrieve features lost from a convex approximation of the unknown objects.\
-Each step is performed by an independent model trained with challenge publics data trough a forward operator that emulates lightcurves experimental setup.
-
-
-[INSERT HERE SOME LINES ABOUT THE MODELS]
+First it performs a **convex reconstruction** where an initial shape (an ellipsoid as default) is adapted to the lightcurves of the unknown object. \
+Second, a **non-convex refinement** step is applied to retrieve features lost from a convex approximation.\
+Each step is performed by an independent model trained with challenge public objects trough a forward operator that emulates lightcurves experimental setup balancing both real and blender data.
 
 For more details on model architectures and training process see [train_convex.py](./train_convex.py) and [train.py](./train_convex.py). \
 **Note:** In those files device is set to "cuda:0". Change to "cuda:1" to allow the usage of GPU, if available.
